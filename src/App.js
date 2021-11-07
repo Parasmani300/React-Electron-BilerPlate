@@ -5,8 +5,14 @@ function App() {
   const [hh,setHH] = useState(0);
   const [mm,setMM] = useState(0);
   const [ss,setSS] = useState(0);
-
   const [isActive,setIsActive] = useState(false);
+
+  const showCheck = () => 
+  {
+    console.log('Helllo')
+    window.ipcRenderer.send('check',{'title':'Hello'})
+  }
+  
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -42,6 +48,9 @@ function App() {
     setSS(0);
   }
 
+  
+
+  
   return (
     <div className="container-fluid">
       <div className="row mt-4">
@@ -53,6 +62,7 @@ function App() {
           <button className="btn btn-warning button-margin" onClick={()=>handleReset()}>Reset</button>
           </center>
         </div>
+        <button onClick={()=>showCheck()}>Show it</button>
       </div>
     </div>
   );

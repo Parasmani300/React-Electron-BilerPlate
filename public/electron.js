@@ -1,7 +1,8 @@
 const path = require('path');
 
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow,Menu,Notification } = require('electron');
 const isDev = require('electron-is-dev');
+const {ipcMain} = require('electron')
 
 function createWindow() {
   // Create the browser window.
@@ -10,8 +11,35 @@ function createWindow() {
     height: 600,
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false,
+      preload: path.join(__dirname,'preload.js')
     },
   });
+
+  const template = [
+    {
+      label: 'Paras',
+      submenu: [
+        {
+          label: 'About',
+          click: () => {
+            new Notification({
+              title: 'About',
+              body: 'Paras is a simple app to manage your tasks.',
+              silent: false,
+              icon: path.join(__dirname, 'assets/icons/icon.png')
+            }).show();
+          }
+        }]
+    }
+  ];
+  const menu = Menu.buildFromTemplate(template);
+  Menu.setApplicationMenu(menu);
+
+
+
+
+
 
   // and load the index.html of the app.
   // win.loadFile("index.html");
@@ -25,6 +53,11 @@ function createWindow() {
     win.webContents.openDevTools({ mode: 'detach' });
   }
 }
+
+
+ipcMain.on('check',(event,arg) =>{
+  new Notification({'title':'Hello','body':'World'}).show()
+})
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
